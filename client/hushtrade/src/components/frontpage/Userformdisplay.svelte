@@ -8,6 +8,9 @@
         <input type="text" id="password" name="password" placeholder="input your password">
         <input type="submit" value="sign in">
     </form>
+    <a>forgot your password?</a>
+    <hr>
+    <a>sign up</a>
 </aside>
 
 <style>
@@ -26,6 +29,27 @@
         justify-content: flex-end;
         padding: 1em;
         border-radius: 2px;
+    }
+
+    a{
+        display: flex;
+        height: 50px;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 1);
+        text-decoration: underline;
+        margin: auto;
+    }
+
+    hr{
+        height: 0px;
+        width: 90%;
+        background: black;
+    }
+
+    aside > a:nth-child(6){
+        text-decoration: none;
+        font-size: large;
+        font-weight: bold;
     }
 
     /* @media and screen(max-width: 414px){
