@@ -15,4 +15,19 @@ const sessionMiddleware = session({
 })
 app.use(sessionMiddleware)
 
+import http from "http"
+import { Server } from "socket.io"
+const newServer = http.createServer(app)
+const inputOutput = new Server(newServer)
+//wrapping around inputOutput server - to include sessions (express)
+const ioWrapper = wrapperMiddleware => (socket, next) => wrapperMiddleware(socket.request, {}, next)
+inputOutput.use(ioWrapper(sessionMiddleware))
+
+inputOutput.on("connection", (socket) => {
+    console.log("%s %s","debug","testing")
+})
+
+import priviligesController from "./routers/privilegesController.mjs"
+app.use(priviligesController)
+
 app.listen(PORT, () => console.log("Server running on:", PORT))

@@ -1,26 +1,28 @@
-import database from "../../database/connection/dbConnection"
+import {database} from "../database/connection/dbconnection.mjs"
+import {Router} from "express"
 import jwt from "jsonwebtoken"
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt" 
 //import { generateAccessToken } from "../../utilities/verify/authentication"
 
+const privilegesRouter = Router()
 //Note!: refreshtokens should actually be stored in a persistent state
 //this is for practical educational purposes only
 export let refreshTokens = []
 
 //login ☑️
-export async function login(req, res) {
+privilegesRouter.post("/login", (req, res) => {
         const user = {
             name: req.body.name,
             password: req.body.password
         }
         //does the user even exist?
-        const findUser = await database.get(`SELECT * FROM users WHERE name = ?;`,
+        const findUser = database.get(`SELECT * FROM users WHERE name = ?;`,
             [user.name])
 
         //the user was not found in the database
         if (findUser === undefined) res.status(400).send('bad request')
 
-        if (await bcrypt.compare(user.password, findUser.password)) {
+        if (bcrypt.compare(user.password, findUser.password)) {
             //serialize user with access token
             const accessToken = generateAccessToken(user)
             //refresh the access token for the user
@@ -33,9 +35,9 @@ export async function login(req, res) {
             //deny access
             res.status(401).send({data: "access denied" })
         }
-}
+})
 
-export async function token(req, res){
+privilegesRouter.get("/token", (req, res) => {
         //grab the refresh token from the incoming json body
         const refreshToken = req.body.token
     
@@ -54,10 +56,12 @@ export async function token(req, res){
     
             res.send({data : {at : accessToken}})
         })
-}
+})
 
 //logout ☑️
-export async function logout(req, res) {
+privilegesRouter.delete("logout",(req, res) => {
         refreshTokens = refreshTokens.filter(refreshToken => refreshToken !== req.body.token)
         res.status(204).send({data: {msg: "token removed"}})
-}   
+})
+
+export default privilegesRouter
