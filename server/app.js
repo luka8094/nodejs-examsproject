@@ -27,7 +27,9 @@ inputOutput.on("connection", (socket) => {
     console.log("%s %s","debug","testing")
 })
 
-import priviligesController from "./routers/privilegesController.mjs"
-app.use(priviligesController)
+import priviligesController from "./routers/privilegesRouter.mjs"
+import currenciesRouter from "./routers/currenciesRouter.mjs"
+app.use(priviligesController, currenciesRouter)
+
 
 app.listen(PORT, () => console.log("Server running on:", PORT))
