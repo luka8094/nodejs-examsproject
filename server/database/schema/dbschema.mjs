@@ -5,7 +5,7 @@ const dropMode = false
 
 ;(async () =>{ 
     
-    const seeds = [
+    const userSeeds = [
         {
             name: "admin",
             email: "admin@email.com",
@@ -18,7 +18,42 @@ const dropMode = false
         }
     ]
 
-    console.log(seeds)
+    //TODO: placeholder variable for currency seeds - to be filled out with appropriate data
+    //Currency entity data body:
+    /* template note:        
+
+            name VARCHAR(70),
+            abbreviation VARCHAR(4),
+            profit DECIMAL(10,2),
+            loss DECIMAL(10,2),
+            current DECIMAL(10,2),
+            trade DECIMAL(10,2),
+            volality VARCHAR(4),
+            date DATE,
+            market_value DECIMAL(10,2)
+
+            {name:"", abbreviation:"", profit: 0.00, loss: 0.00, current: 0.00, trade: 0.00, volatility: "-",}
+    */
+    const currencySeeds = [
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+    ]
+
+    console.log(userSeeds)
 
     if(dropMode){
         database.exec("DROP TABLE IF EXISTS user;")
@@ -28,18 +63,41 @@ const dropMode = false
     //create users table
     database.exec(`
         CREATE TABLE IF NOT EXISTS users(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name VARCHAR(70),
-            email VARCHAR(255),
-            password VARCHAR(255)
+            userId INTEGER PRIMARY KEY AUTOINCREMENT,
+            firstname VARCHAR(70),
+            lastname VARCHAR(70),
+            password VARCHAR(255),
+            email VARCHAR(255)
         );
+
     `)
+    
+    //create memberships table
+    database.exec(`
+        CREATE TABLE IF NOT EXISTS membership(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            type VARCHAR(70),
+            userId FOREIGN KEY REFERENCES users(userId)
+        );
+
+    `)
+    
+    //Notes and reference from : https://stackoverflow.com/questions/34329852/how-to-insert-date-values-into-table
+    //CREATE TABLE t(dob DATE);
+    //Date values - INSERT INTO t(dob) VALUES(TO_DATE('17/12/2015', 'DD/MM/YYYY'));
 
     database.exec(`
-        CREATE TABLE IF NOT EXISTS products(
+         CREATE TABLE IF NOT EXISTS currencies(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name VARCHAR(200),
-            price INTEGER
+            name VARCHAR(70),
+            abbreviation VARCHAR(4),
+            profit DECIMAL(10,2),
+            loss DECIMAL(10,2),
+            current DECIMAL(10,2),
+            trade DECIMAL(10,2),
+            volatility VARCHAR(4),
+            date DATE,
+            market_value DECIMAL(10,2)
         );
     `)
     
@@ -48,17 +106,17 @@ const dropMode = false
         database.run(`
         INSERT INTO users (name, email, password) VALUES
         (
-            '${seeds[0]['name']}',
-            '${seeds[0]['email']}',
-            '${seeds[0]['password']}'
+            '${userSeeds[0]['name']}',
+            '${userSeeds[0]['email']}',
+            '${userSeeds[0]['password']}'
         )
         `)
         database.run(`
         INSERT INTO users (name, email, password) VALUES
         (
-            '${seeds[1]['name']}',
-            '${seeds[1]['email']}',
-            '${seeds[1]['password']}'
+            '${userSeeds[1]['name']}',
+            '${userSeeds[1]['email']}',
+            '${userSeeds[1]['password']}'
         )
         `)
     }

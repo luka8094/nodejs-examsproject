@@ -20,6 +20,7 @@
         background: lightgrey;
         border: dashed 1px black;
         height: fit-content;
+        width: fit-content;
     }
 
     form{
