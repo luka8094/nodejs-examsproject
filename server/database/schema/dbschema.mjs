@@ -1,20 +1,24 @@
-import database from "../connection/dbConnection.mjs"
+import {database} from "../connection/dbConnection.mjs"
 import bcrypt from "bcrypt"
 
 const dropMode = false
 
 ;(async () =>{ 
-    
+
     const userSeeds = [
-        {
-            name: "admin",
-            email: "admin@email.com",
-            password: await bcrypt.hash("superpassword", 12)
+        {   
+            firstname: "Bob",
+            lastname: "Bobson",
+            username: "admin",
+            password: await bcrypt.hash("superpassword", 12),
+            email: "admin@email.com"
         },
-        {
-            name: "user2",
-            email: "user2@email.com",
-            password: await bcrypt.hash("password2", 12)
+        {   
+            firstname: "John",
+            lastname: "Johnson",
+            username: "user2",
+            password: await bcrypt.hash("password2", 12),
+            email: "user2@email.com"
         }
     ]
 
@@ -66,6 +70,7 @@ const dropMode = false
             userId INTEGER PRIMARY KEY AUTOINCREMENT,
             firstname VARCHAR(70),
             lastname VARCHAR(70),
+            username VARCHAR(70),
             password VARCHAR(255),
             email VARCHAR(255)
         );
@@ -77,7 +82,8 @@ const dropMode = false
         CREATE TABLE IF NOT EXISTS membership(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             type VARCHAR(70),
-            userId FOREIGN KEY REFERENCES users(userId)
+            userId INTEGER,
+            FOREIGN KEY (userId) REFERENCES users(userId)
         );
 
     `)
@@ -104,19 +110,23 @@ const dropMode = false
     //seed the users table
     if(!dropMode){
         database.run(`
-        INSERT INTO users (name, email, password) VALUES
+        INSERT INTO users (firstname, lastname, username, password, email) VALUES
         (
-            '${userSeeds[0]['name']}',
-            '${userSeeds[0]['email']}',
-            '${userSeeds[0]['password']}'
+            '${userSeeds[0]['firstname']}',
+            '${userSeeds[0]['lastname']}',
+            '${userSeeds[0]['username']}',
+            '${userSeeds[0]['password']}',
+            '${userSeeds[0]['email']}'
         )
         `)
         database.run(`
-        INSERT INTO users (name, email, password) VALUES
+        INSERT INTO users (firstname, lastname, username, password, email) VALUES
         (
-            '${userSeeds[1]['name']}',
-            '${userSeeds[1]['email']}',
-            '${userSeeds[1]['password']}'
+            '${userSeeds[1]['firstname']}',
+            '${userSeeds[1]['lastname']}',
+            '${userSeeds[1]['username']}',
+            '${userSeeds[1]['password']}',
+            '${userSeeds[1]['email']}'
         )
         `)
     }

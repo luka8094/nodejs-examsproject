@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon app.js",
-    "createdb": "nodemon ./database/schema/dbschema.mjs"
+    "start-dev": "nodemon app.js",
+    "create-db": "nodemon ./database/schema/dbschema.mjs"
   },
   "keywords": [],
   "author": "",
