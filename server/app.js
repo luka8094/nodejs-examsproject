@@ -1,8 +1,10 @@
 import "dotenv/config"
-import express from "express"
+import express, { urlencoded } from "express"
 
 const app = express()
 const PORT = process.env.PORT || 3000
+
+app.user(express.urlencoded({extended: true}))
 
 import path from "path"
 app.use(express.static(path.resolve("../client/public")))
@@ -25,6 +27,11 @@ inputOutput.use(ioWrapper(sessionMiddleware))
 
 inputOutput.on("connection", (socket) => {
     console.log("%s %s","debug","testing")
+
+    socket.on("enterText", ({data}) => {
+        const chatText = socket.request.session.username
+        socket.emit("insertText", {data, username})
+    })
 })
 
 import priviligesController from "./routers/privilegesRouter.mjs"
