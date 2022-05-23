@@ -101,7 +101,7 @@ const dropMode = false
             loss DECIMAL(10,2),
             current DECIMAL(10,2),
             trade DECIMAL(10,2),
-            volatility VARCHAR(4),
+            volatility BOOLEAN,
             date DATE,
             market_value DECIMAL(10,2)
         );

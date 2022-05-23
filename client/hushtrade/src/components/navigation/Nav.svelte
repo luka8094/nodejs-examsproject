@@ -13,7 +13,7 @@
     }
 </script>
 
-<Router class="router">
+<Router>
     <nav>
         <picture>
             <div class="hushtrade-logo">
@@ -28,17 +28,17 @@
                 <a use:link href="market">market</a>
             </li>
             <li>
-                <a on:click="{toggleConfirmation}" use:link href="account">account</a>
+                <a use:link href="account">account</a>
             </li>
             <li>
-                <a use:link href="chat">chat</a>
+                <a use:link href="chatroom">chat</a>
             </li>
         </ul>
     </nav>
-    <Route path="/" component="{Main}"/>
-    <Route path="market" component="{Market}"/>
-    <Route path="account" component="{Account}"/>
-    <Route path="chat" component="{Chatroom}"/>
+    <Route let:location let:navigate path="/"><Main/></Route>
+    <Route let:location let:navigate path="market"><Market/></Route>
+    <Route let:location let:navigate path="account"><Account/></Route>
+    <Route let:location let:navigate path="chatroom"><Chatroom/></Route>
 </Router>
 <!--{#if clickConfirmation}
 		<Userformdisplay/>

@@ -21,7 +21,8 @@
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
     "session": "^0.1.0",
-    "socket.io": "^4.5.0",
+    "socket.io": "^4.5.1",
+    "socket.io-client": "^4.5.1",
     "sqlite": "^4.1.1",
     "sqlite3": "^5.0.7"
   },

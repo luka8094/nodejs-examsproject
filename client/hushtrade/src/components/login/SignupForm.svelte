@@ -8,9 +8,9 @@
         <input type="text" id="password" name="password" placeholder="input your password">
         <input type="submit" value="sign in">
     </form>
-    <a>forgot your password?</a>
+    <a href="/">forgot your password?</a>
     <hr>
-    <a>sign up</a>
+    <a href="/">sign up</a>
 </aside>
 
 <style>

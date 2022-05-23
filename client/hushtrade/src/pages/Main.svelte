@@ -1,5 +1,7 @@
 <script>
 
+    export let location
+
     const topCurrency = [
         { id: 1, currencyName: "D0ge", rate: 1000.0},
         { id: 2, currencyName: "digitM0ney", rate: 950.0},

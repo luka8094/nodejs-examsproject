@@ -1,42 +1,43 @@
-import "dotenv/config"
-import express, { urlencoded } from "express"
+/* general express server initialization variables */
+import "dotenv/config";
+import express from "express";
+import path from "path";
+import session from "express-session";
+import priviligesRouter from "./routers/privilegesRouter.mjs";
+import currenciesRouter from "./routers/currenciesRouter.mjs";
 
-const app = express()
-const PORT = process.env.PORT || 3000
-
-app.user(express.urlencoded({extended: true}))
-
-import path from "path"
-app.use(express.static(path.resolve("../client/public")))
-
-import session from "express-session"
+const app = express();
 const sessionMiddleware = session({
     secret: process.env.SECRET_ACCESS_TOKEN,
     resave: false,
     saveUninitialized: true
-})
-app.use(sessionMiddleware)
+});
 
-import http from "http"
-import { Server } from "socket.io"
-const newServer = http.createServer(app)
-const inputOutput = new Server(newServer)
-//wrapping around inputOutput server - to include sessions (express)
-const ioWrapper = wrapperMiddleware => (socket, next) => wrapperMiddleware(socket.request, {}, next)
-inputOutput.use(ioWrapper(sessionMiddleware))
+app.use(express.urlencoded({extended: true}));
+app.use(sessionMiddleware);
+app.use(express.static(path.resolve("../client/hushtrade/public")));
+app.use(priviligesRouter);
+app.use(currenciesRouter);
 
-inputOutput.on("connection", (socket) => {
-    console.log("%s %s","debug","testing")
+/* sockets.io related variables */
+import http from "http";
+import { Server } from "socket.io";
 
-    socket.on("enterText", ({data}) => {
-        const chatText = socket.request.session.username
-        socket.emit("insertText", {data, username})
-    })
-})
+const server = http.createServer(app);
+const io = new Server(server);
+const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+io.use(wrap(sessionMiddleware));
 
-import priviligesController from "./routers/privilegesRouter.mjs"
-import currenciesRouter from "./routers/currenciesRouter.mjs"
-app.use(priviligesController, currenciesRouter)
+io.on("connection", (socket) => {
+    //console.log(socket);
+    socket.on("messageSent", ({data}) => {
+        console.log(data);
+        const newData = data;
+        socket.request.session.check = "returning";
+        const checkValue = socket.request.session.check;
+        io.emit("showMessage", {newData, checkValue});
+    });
+});
 
-
-app.listen(PORT, () => console.log("Server running on:", PORT))
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => console.log("Server running on:", PORT));
